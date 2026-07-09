@@ -1,0 +1,11 @@
+{:itonami.blueprint/id "cloud-itonami-isic-4671"
+ :itonami.blueprint/name "Wholesale of solid, liquid and gaseous fuels"
+ :itonami.blueprint/isic-rev5 "4671"
+ :itonami.blueprint/domain :downstream/fuel-wholesale
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:safety :environmental-protection :transparency]
+ :itonami.blueprint/governor :fuel-trading-governor
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :optimization]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/maturity :implemented}
