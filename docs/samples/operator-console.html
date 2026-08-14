@@ -1,20 +1,246 @@
-<html><head><meta charset="utf-8"><title>cloud-itonami · fueltrade</title><style>table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.ok { color: #137a3f; }
-body { font-family: system-ui,-apple-system,sans-serif; margin: 0; color: #1a1a1a; background: #fafafa; }
-header.bar { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #fff; border-bottom: 1px solid #e5e5e5; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
-h2 { margin-top: 0; font-size: 15px; }
-td.num { font-variant-numeric: tabular-nums; text-align: right; }
-.warn { color: #b25c00; background: #fff8e1; padding: 2px 6px; border-radius: 4px; }
-main { max-width: 1040px; margin: 24px auto; padding: 0 20px; }
-header.bar h1 { font-size: 18px; margin: 0; font-weight: 600; }
-.muted { color: #888; }
-.critical { color: #fff; background: #b3261e; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-.card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-.err { color: #b3261e; background: #fbe9e7; padding: 2px 6px; border-radius: 4px; }
-button { font: inherit; padding: 4px 10px; border: 1px solid #d0d0d0; border-radius: 4px; background: #fff; color: #1a1a1a; cursor: pointer; }
-button.dispatch { color: #137a3f; border-color: #137a3f; }
-button.settle { color: #1a6fb8; border-color: #1a6fb8; }
-button:disabled { color: #aaa; border-color: #e0e0e0; cursor: not-allowed; }
-th { font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
-header.bar .badge { margin-left: auto; font-size: 12px; color: #666; }</style></head><body><header class="bar"><h1>Wholesale of Solid, Liquid and Gaseous Fuels — Operator Console</h1><span class="badge">read-only · governor-gated · human sign-off required</span></header><main><section class="card"><h2>Counterparty diligence · fo-1 (Akita Energy Trading Co, JPN)</h2><table><thead><tr><th>Check</th><th>Fact</th><th>Required</th><th>Verdict</th></tr></thead><tbody><tr><td>Counterparty credit</td><td>cleared</td><td>credit-cleared? true</td><td><span class="ok">✓ cleared</span></td></tr><tr><td>Contract on file</td><td>FOB rack, net 30 days</td><td>contract-terms present</td><td><span class="ok">✓ on file</span></td></tr><tr><td>Sanctions screening (OFAC / equivalent)</td><td>screened</td><td>sanctions-screened? true</td><td><span class="ok">✓ screened</span></td></tr><tr><td>Evidence (credit / contract-PO / sanctions)</td><td>3 / 3</td><td>JPN 関税法 / 輸出貿易管理令</td><td><span class="ok">✓ complete</span></td></tr></tbody></table><p class="muted" style="margin-bottom:0">Governor clean — but <strong>:delivery/dispatch still escalates to a human trading supervisor</strong> (never auto-commits at any phase).</p></section><section class="card"><h2>Fuel-orders</h2><table><thead><tr><th>ID</th><th>Order</th><th>Counterparty</th><th>Jurisdiction</th><th>Governor verdict</th><th>Action</th></tr></thead><tbody><tr><td>fo-1</td><td>FO-2026-0001</td><td>Akita Energy Trading Co</td><td>JPN</td><td><span class="warn">escalate · dispatch</span></td><td><button class="dispatch">Dispatch…</button> <button class="settle" disabled>Settle</button></td></tr><tr><td>fo-3</td><td>FO-2026-0003</td><td>Cedar Petroleum</td><td>JPN</td><td><span class="err">HOLD · credit-uncleared</span></td><td><button class="dispatch" disabled>Dispatch…</button> <button class="settle" disabled>Settle</button></td></tr><tr><td>fo-4</td><td>FO-2026-0004</td><td>Delta Fuels BV</td><td>JPN</td><td><span class="err">HOLD · contract-missing</span></td><td><button class="dispatch" disabled>Dispatch…</button> <button class="settle" disabled>Settle</button></td></tr><tr><td>fo-5</td><td>FO-2026-0005</td><td>Eagle Energy SA</td><td>JPN</td><td><span class="critical">HOLD · counterparty-sanctions-flag-unresolved</span></td><td><button class="dispatch" disabled>Dispatch…</button> <button class="settle" disabled>Settle</button></td></tr><tr><td>fo-2</td><td>FO-2026-0002</td><td>Atlantis Trading Ltd</td><td>ATL</td><td><span class="err">HOLD · no-spec-basis</span></td><td><button class="dispatch" disabled>Dispatch…</button> <button class="settle" disabled>Settle</button></td></tr></tbody></table><p class="muted" style="margin-bottom:0">HOLD verdicts are un-overridable and never reach a human approver; <span class="warn">escalate</span> pauses for a human trading supervisor's sign-off. Settle is enabled only after an order is delivered.</p></section></main></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="light"><meta name="theme-color" content="#ffffff"><title>cloud-itonami-isic-4671 &middot; fueltrade &middot; Operator Console</title><style>:root{--color-neutral-white:#ffffff;--color-neutral-solid-gray-50:#f2f2f2;--color-neutral-solid-gray-100:#e6e6e6;--color-neutral-solid-gray-200:#cccccc;--color-neutral-solid-gray-600:#666666;--color-neutral-solid-gray-700:#4d4d4d;--color-neutral-solid-gray-800:#333333;--color-neutral-solid-gray-900:#1a1a1a;--color-primitive-blue-50:#e8f1fe;--color-primitive-blue-100:#d9e6ff;--color-primitive-blue-800:#0031d8;--color-primitive-green-50:#e6f5ec;--color-primitive-green-100:#c2e5d1;--color-primitive-green-800:#197a4b;--color-primitive-orange-50:#ffeee2;--color-primitive-orange-100:#ffdfca;--color-primitive-orange-800:#c74700;--color-primitive-red-50:#fdeeee;--color-primitive-red-100:#ffdada;--color-primitive-red-800:#ec0000;--color-primitive-red-900:#ce0000;--color-semantic-success-2:var(--color-primitive-green-800);--color-semantic-error-1:var(--color-primitive-red-800);--color-semantic-error-2:var(--color-primitive-red-900);--color-semantic-warning-orange-2:var(--color-primitive-orange-800);--font-family-sans:"Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;--font-family-mono:"Noto Sans Mono",monospace;}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--color-neutral-solid-gray-50);color:var(--color-neutral-solid-gray-800);font-family:var(--font-family-sans);line-height:1.7;-webkit-text-size-adjust:100%}
+header.bar{background:var(--color-neutral-white);border-bottom:1px solid var(--color-neutral-solid-gray-200);padding:1.5rem 1.5rem 1.25rem}
+header.bar .inner{max-width:1180px;margin:0 auto}
+header.bar h1{margin:0 0 .5rem;font-size:1.5rem;line-height:1.4;font-weight:700;color:var(--color-neutral-solid-gray-900)}
+header.bar .isic{margin:0 0 .75rem;font-size:.875rem;color:var(--color-neutral-solid-gray-600)}
+header.bar .badges{display:flex;flex-wrap:wrap;gap:.5rem}
+main{max-width:1180px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
+.card{background:var(--color-neutral-white);border:1px solid var(--color-neutral-solid-gray-200);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.card h2{margin:0 0 .5rem;font-size:1.125rem;line-height:1.5;font-weight:700;color:var(--color-neutral-solid-gray-900)}
+.card .lead{margin:0 0 1.25rem;font-size:.875rem;line-height:1.8;color:var(--color-neutral-solid-gray-600)}
+.scroll{max-width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+th,td{text-align:left;padding:.5rem .625rem;vertical-align:top;border-bottom:1px solid var(--color-neutral-solid-gray-100)}
+th{font-weight:700;color:var(--color-neutral-solid-gray-700);white-space:nowrap;border-bottom:2px solid var(--color-neutral-solid-gray-200)}
+tbody tr:last-child td{border-bottom:none}
+td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+code{font-family:var(--font-family-mono);font-size:.9em;background:var(--color-neutral-solid-gray-50);border:1px solid var(--color-neutral-solid-gray-200);border-radius:4px;padding:1px 5px}
+.muted{color:var(--color-neutral-solid-gray-600)}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.8125rem;font-weight:700;white-space:nowrap;border:1px solid transparent}
+.is-ok{color:var(--color-semantic-success-2);background:var(--color-primitive-green-50);border-color:var(--color-primitive-green-100)}
+.is-warn{color:var(--color-semantic-warning-orange-2);background:var(--color-primitive-orange-50);border-color:var(--color-primitive-orange-100)}
+.is-bad{color:var(--color-semantic-error-2);background:var(--color-primitive-red-50);border-color:var(--color-primitive-red-100)}
+.is-info{color:var(--color-primitive-blue-800);background:var(--color-primitive-blue-50);border-color:var(--color-primitive-blue-100)}
+.note{margin:1.25rem 0 0;padding:.875rem 1rem;border-radius:8px;font-size:.8125rem;line-height:1.8;background:var(--color-primitive-blue-50);border:1px solid var(--color-primitive-blue-100);color:var(--color-neutral-solid-gray-800)}
+.note.alarm{background:var(--color-primitive-red-50);border-color:var(--color-primitive-red-100);color:var(--color-semantic-error-1)}
+.note p{margin:0}
+.note p+p{margin-top:.5rem}
+footer{max-width:1180px;margin:0 auto;padding:0 1.5rem 3rem;font-size:.8125rem;line-height:1.8;color:var(--color-neutral-solid-gray-600)}
+footer p{margin:0}
+</style></head>
+<body>
+<header class="bar"><div class="inner">
+  <h1>Wholesale of solid, liquid and gaseous fuels &mdash; Operator Console</h1>
+  <p class="isic">ISIC 4671 &middot; <code>cloud-itonami-isic-4671</code> &middot; FuelTradeAdvisor &#8891; <code>:fuel-trading-governor</code> on a langgraph-clj StateGraph</p>
+  <div class="badges"><span class="pill is-info">read-only sample</span><span class="pill is-info">generated at build time</span><span class="pill is-warn">dispatch &amp;amp; settlement always human-approved</span><span class="pill is-bad">8 HARD governor holds</span></div>
+</div></header>
+<main>
+  <section class="card">
+    <h2>Fuel-orders &mdash; SSoT after the run</h2>
+    <p class="lead">The five seeded orders of <code>fueltrade.store/demo-data</code>, read back out of the store after the scenario ran. Delivery and invoice numbers are assigned by <code>fueltrade.registry</code> from a jurisdiction-scoped sequence &mdash; an order shows one only if a human actually approved that actuation.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Order</th><th>Order no.</th><th>Counterparty</th><th>Juris.</th><th>Product grade</th><th>Volume (bbl)</th><th>Price (USD/bbl)</th><th>Delivery no.</th><th>Invoice no.</th><th>Last decision</th></tr></thead>
+      <tbody>
+        <tr><td><code>fo-1</code></td><td>FO-2026-0001</td><td>Akita Energy Trading Co</td><td>JPN</td><td>Gasoil (ULSD 0.1%S)</td><td><span class="num">50000</span></td><td><span class="num">85.5</span></td><td><code>JPN-DELIVERY-000000</code></td><td><code>JPN-INVOICE-000000</code></td><td><span class="pill is-bad">HOLD · already-invoiced</span></td></tr>
+        <tr><td><code>fo-2</code></td><td>FO-2026-0002</td><td>Atlantis Trading Ltd</td><td>ATL</td><td>Gasoil (ULSD 0.1%S)</td><td><span class="num">50000</span></td><td><span class="num">85.5</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">HOLD · no-spec-basis</span></td></tr>
+        <tr><td><code>fo-3</code></td><td>FO-2026-0003</td><td>Cedar Petroleum</td><td>JPN</td><td>Gasoil (ULSD 0.1%S)</td><td><span class="num">50000</span></td><td><span class="num">85.5</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">HOLD · credit-uncleared</span></td></tr>
+        <tr><td><code>fo-4</code></td><td>FO-2026-0004</td><td>Delta Fuels BV</td><td>JPN</td><td>Gasoil (ULSD 0.1%S)</td><td><span class="num">50000</span></td><td><span class="num">85.5</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-warn">rejected by approver</span></td></tr>
+        <tr><td><code>fo-5</code></td><td>FO-2026-0005</td><td>Eagle Energy SA</td><td>JPN</td><td>Gasoil (ULSD 0.1%S)</td><td><span class="num">50000</span></td><td><span class="num">85.5</span></td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">HOLD · counterparty-sanctions-flag-unresolved</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Counterparty diligence &mdash; the facts the governor actually reads</h2>
+    <p class="lead">Each seeded order isolates exactly one failure mode. These are direct entity boolean reads off the <code>fuel-order</code> record (<code>:credit-cleared?</code>, <code>:contract-terms</code>, <code>:sanctions-screened?</code>), re-evaluated here through the same <code>fueltrade.facts/required-evidence-satisfied?</code> predicate the governor uses &mdash; not a copy of the governor's opinion.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Order</th><th>Counterparty</th><th>Credit clearance</th><th>Contract on file</th><th>Sanctions screening</th><th>Required evidence</th><th>Delivery</th><th>Invoice</th></tr></thead>
+      <tbody>
+        <tr><td><code>fo-1</code></td><td>Akita Energy Trading Co</td><td><span class="pill is-ok">cleared</span></td><td><span class="pill is-ok">FOB rack, net 30 days</span></td><td><span class="pill is-ok">screened</span></td><td><span class="pill is-ok">3 / 3 on file</span></td><td><span class="pill is-ok">dispatched</span></td><td><span class="pill is-ok">settled</span></td></tr>
+        <tr><td><code>fo-2</code></td><td>Atlantis Trading Ltd</td><td><span class="pill is-ok">cleared</span></td><td><span class="pill is-ok">FOB rack, net 30 days</span></td><td><span class="pill is-ok">screened</span></td><td><span class="muted">no assessment committed</span></td><td><span class="muted">not dispatched</span></td><td><span class="muted">not settled</span></td></tr>
+        <tr><td><code>fo-3</code></td><td>Cedar Petroleum</td><td><span class="pill is-bad">not cleared</span></td><td><span class="pill is-ok">FOB rack, net 30 days</span></td><td><span class="pill is-ok">screened</span></td><td><span class="pill is-ok">3 / 3 on file</span></td><td><span class="muted">not dispatched</span></td><td><span class="muted">not settled</span></td></tr>
+        <tr><td><code>fo-4</code></td><td>Delta Fuels BV</td><td><span class="pill is-ok">cleared</span></td><td><span class="pill is-bad">none on file</span></td><td><span class="pill is-ok">screened</span></td><td><span class="pill is-ok">3 / 3 on file</span></td><td><span class="muted">not dispatched</span></td><td><span class="muted">not settled</span></td></tr>
+        <tr><td><code>fo-5</code></td><td>Eagle Energy SA</td><td><span class="pill is-ok">cleared</span></td><td><span class="pill is-ok">FOB rack, net 30 days</span></td><td><span class="pill is-bad">not screened</span></td><td><span class="pill is-ok">3 / 3 on file</span></td><td><span class="muted">not dispatched</span></td><td><span class="muted">not settled</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Fuel Trading Governor &mdash; HARD rule inventory</h2>
+    <p class="lead">All seven HARD rules in <code>fueltrade.governor</code>. The build refuses to write this page unless every one of them fires in the scenario, so a rule that silently stops holding fails the build instead of quietly vanishing from the console.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Rule</th><th>This run</th></tr></thead>
+      <tbody>
+        <tr><td><code>already-delivered</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>already-invoiced</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>contract-missing</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>counterparty-sanctions-flag-unresolved</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>credit-uncleared</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>evidence-incomplete</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+        <tr><td><code>no-spec-basis</code></td><td><span class="pill is-ok">fired this run</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Holds this run</h2>
+    <p class="lead">8 HARD governor holds (un-overridable &mdash; they never reach a human approver) and 1 hold from the rollout phase gate, which is a second, independent layer: it can only add caution, never remove it. A HARD hold writes its rejection to the append-only ledger and mutates nothing.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Op</th><th>Order</th><th>Rule</th><th>Detail</th><th>Advisor confidence</th></tr></thead>
+      <tbody>
+        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">evidence-incomplete</span></td><td>法域の必要書類(信用審査記録/契約書またはPO/制裁スクリーニング記録)が充足していない状態での提案</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">phase gate · phase-disabled</span></td><td>rollout phase 1 (assisted-intake) does not enable this write op -- the governor itself had already cleared it</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-delivered</span></td><td>fo-1 は既に出荷済み</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>settle</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-invoiced</span></td><td>fo-1 は既に請求済み</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>verify</code></td><td><code>fo-2</code></td><td><span class="pill is-bad">no-spec-basis</span></td><td>公式spec-basisの引用が無い提案は法域要件として扱えない</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-3</code></td><td><span class="pill is-bad">credit-uncleared</span></td><td>fo-3 の取引先信用審査(credit-clearance)が未了 -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-4</code></td><td><span class="pill is-bad">contract-missing</span></td><td>fo-4 に契約条項(contract-terms)の記録が無い -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>settle</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Rollout phase gate (<code>fueltrade.phase</code>)</h2>
+    <p class="lead">Read directly out of <code>fueltrade.phase/phases</code>. Note that <code>:delivery/dispatch</code> and <code>:invoice/settle</code> are absent from every phase's auto set, including phase 3 &mdash; a permanent structural fact, not a rollout milestone still to come. The governor's high-stakes gate enforces the same invariant independently.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Phase</th><th>Label</th><th>Writes allowed</th><th>May auto-commit when governor-clean</th></tr></thead>
+      <tbody>
+        <tr><td><span class="num">0</span></td><td><code>read-only</code></td><td><span class="muted">none (read-only)</span></td><td><span class="muted">none — every write needs a human</span></td></tr>
+        <tr><td><span class="num">1</span></td><td><code>assisted-intake</code></td><td><code>intake</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
+        <tr><td><span class="num">2</span></td><td><code>assisted-verify</code></td><td><code>intake</code> <code>verify</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
+        <tr><td><span class="num">3</span></td><td><code>supervised-auto</code></td><td><code>dispatch</code> <code>intake</code> <code>settle</code> <code>verify</code></td><td><code>intake</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Approval trail</h2>
+    <p class="lead">One row per operation run. <code>interrupt-before #{:request-approval}</code> pauses the graph and hands the decision to a human trading supervisor; the approver resumes it with <code>{:approval {:status ...}}</code>. 6 approvals were granted and 1 was rejected in this scenario.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Thread</th><th>Operation</th><th>Escalation</th><th>Human decision</th><th>Final disposition</th></tr></thead>
+      <tbody>
+        <tr><td><code>t01</code></td><td>fo-1 intake (phase 3 auto-commit)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t02</code></td><td>fo-1 dispatch before any contract assessment</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t03</code></td><td>fo-1 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t04</code></td><td>fo-1 dispatch attempted at rollout phase 1</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t05</code></td><td>fo-1 bulk-fuel dispatch (approved)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t06</code></td><td>fo-1 invoice settlement (approved)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t07</code></td><td>fo-1 dispatch a second time</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t08</code></td><td>fo-1 invoice settled a second time</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t09</code></td><td>fo-2 contract verification (unregistered jurisdiction ATL)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t10</code></td><td>fo-3 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t11</code></td><td>fo-3 dispatch (counterparty credit not cleared)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t12</code></td><td>fo-4 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t13</code></td><td>fo-4 dispatch (no contract terms on file)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t14</code></td><td>fo-4 invoice settlement (human rejected)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-warn">rejected by approver</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t15</code></td><td>fo-5 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t16</code></td><td>fo-5 dispatch (sanctions screening not passed)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t17</code></td><td>fo-5 invoice settlement (sanctions screening not passed)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Approver attribution &mdash; measured, not assumed</h2>
+    <p class="lead"><code>fueltrade.operation</code> attaches the approver to the commit record's <code>:payload</code> only; <code>:value</code> is left exactly as the advisor proposed it. Whether the approver then survives is decided per-effect by <code>fueltrade.store/commit-record!</code>. This table is derived at render time by walking each register and testing for the key, so it self-corrects if the store is later changed &mdash; it is not a hardcoded verdict.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Register</th><th>Effect</th><th>Commit path</th><th>Rows</th><th>Approver in the committed record</th></tr></thead>
+      <tbody>
+        <tr><td>contract assessment</td><td><code>:contract-assessment/set</code></td><td>persists the record's :payload</td><td><span class="num">4</span></td><td><span class="pill is-ok">approver retained (4 / 4)</span></td></tr>
+        <tr><td>fuel-order record</td><td><code>:order/upsert</code></td><td>persists the record's :value</td><td><span class="num">5</span></td><td><span class="pill is-bad">approver DROPPED (0 / 5)</span></td></tr>
+        <tr><td>fuel-delivery draft</td><td><code>:order/mark-delivered</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
+        <tr><td>fuel-invoice draft</td><td><code>:order/mark-invoiced</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note alarm"><p><strong>Attribution gap observed in this run.</strong> The assessment branch of <code>commit-record!</code> persists <code>payload</code>, so the approver survives there. The fuel-order branch persists <code>value</code>, and the two actuation branches (<code>:order/mark-delivered</code>, <code>:order/mark-invoiced</code>) recompute their record from <code>fueltrade.registry</code> and read neither &mdash; so for the two acts that actually move product and money, the approver is <strong>not</strong> in the book of record.</p><p>Who signed off is shown below from the audit facts instead, and is labelled <em>(audit only &mdash; not in commit record)</em> wherever that is the case. This page does not omit the approver: a reader must be able to tell &ldquo;nobody approved&rdquo; from &ldquo;the store did not keep it&rdquo;.</p></div>
+  </section>
+  <section class="card">
+    <h2>Who signed off &mdash; from the audit facts</h2>
+    <p class="lead">The <code>:approval-granted</code> facts produced by the graph's <code>:request-approval</code> node. These are the authoritative record of who approved what in this run, joined here because the commit records for the two actuation effects do not carry the approver.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Op</th><th>Order</th><th>Approver</th><th>Where this is recorded</th></tr></thead>
+      <tbody>
+        <tr><td><code>verify</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
+        <tr><td><code>settle</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
+        <tr><td><code>verify</code></td><td><code>fo-3</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>verify</code></td><td><code>fo-4</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>verify</code></td><td><code>fo-5</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Book of record &mdash; fuel-delivery / fuel-invoice drafts</h2>
+    <p class="lead">Append-only registration drafts built by <code>fueltrade.registry</code> (pure functions &mdash; no call to any real loading-rack, ERP or billing system). Every certificate this actor produces is UNSIGNED: signature is the operator's act, not this actor's.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Kind</th><th>Record id</th><th>Order</th><th>Jurisdiction</th><th>Ledger property</th><th>Approver in record</th></tr></thead>
+      <tbody>
+        <tr><td>fuel-delivery-draft</td><td><code>JPN-DELIVERY-000000</code></td><td><code>fo-1</code></td><td>JPN</td><td><span class="pill is-info">immutable</span></td><td><span class="pill is-bad">not in record</span></td></tr>
+        <tr><td>fuel-invoice-draft</td><td><code>JPN-INVOICE-000000</code></td><td><code>fo-1</code></td><td>JPN</td><td><span class="pill is-info">immutable</span></td><td><span class="pill is-bad">not in record</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Audit ledger (this run)</h2>
+    <p class="lead">The append-only decision-fact log &mdash; 17 facts. Every commit and every hold this scenario produced, in order. “Which order was verified on what jurisdictional basis, which counterparty had credit uncleared / no contract / an unresolved sanctions flag, which order had bulk fuel dispatched, which invoice was settled” is always a query over an immutable log.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Fact</th><th>Op</th><th>Order</th><th>Basis</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>committed</td><td><code>intake</code></td><td><code>fo-1</code></td><td>id, counterparty</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>evidence-incomplete</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-1</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>phase-disabled</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
+        <tr><td>committed</td><td><code>settle</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>already-delivered</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>governor-hold</td><td><code>settle</code></td><td><code>fo-1</code></td><td>already-invoiced</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>governor-hold</td><td><code>verify</code></td><td><code>fo-2</code></td><td>no-spec-basis</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-3</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-3</code></td><td>credit-uncleared</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-4</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-4</code></td><td>contract-missing</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>approval-rejected</td><td><code>settle</code></td><td><code>fo-4</code></td><td>approver-rejected</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-5</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>governor-hold</td><td><code>settle</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Jurisdiction spec-basis catalog (<code>fueltrade.facts</code>)</h2>
+    <p class="lead">The official-source table the governor checks every <code>:contract/verify</code> proposal against. A jurisdiction absent from this table has NO spec-basis, full stop &mdash; the advisor must not fabricate one, and the governor holds if it tries (which is exactly what happened to <code>fo-2</code> above, whose jurisdiction <code>ATL</code> is deliberately unregistered).</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>ISO3</th><th>Owner authority</th><th>Legal basis</th><th>Provenance</th><th>Required evidence</th></tr></thead>
+      <tbody>
+        <tr><td><code>GBR</code></td><td>HM Revenue &amp; Customs (HMRC) / Office of Financial Sanctions Implementation (OFSI)</td><td>Excise Notice 179; UK financial sanctions regulations</td><td><a href="https://www.gov.uk/government/organisations/hm-revenue-customs">https://www.gov.uk/government/organisations/hm-revenue-customs</a></td><td>credit-clearance record; contract/PO; sanctions-screening (OFAC/equivalent) record</td></tr>
+        <tr><td><code>JPN</code></td><td>財務省 (MOF) 関税局 / 経済産業省</td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order)</td><td><a href="https://www.customs.go.jp/">https://www.customs.go.jp/</a></td><td>credit-clearance record; contract/PO; sanctions-screening (OFAC/equivalent) record</td></tr>
+        <tr><td><code>NOR</code></td><td>Customs Norway (Tollvesenet) / Ministry of Foreign Affairs</td><td>Customs Act (Tollloven); Norway sanctions regulations</td><td><a href="https://www.toll.no/en/">https://www.toll.no/en/</a></td><td>credit-clearance record; contract/PO; sanctions-screening (OFAC/equivalent) record</td></tr>
+        <tr><td><code>USA</code></td><td>OFAC (U.S. Treasury) / IRS</td><td>OFAC sanctions programs; fuel excise tax (26 U.S.C. §4081)</td><td><a href="https://ofac.treasury.gov/">https://ofac.treasury.gov/</a></td><td>credit-clearance record; contract/PO; sanctions-screening (OFAC/equivalent) record</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note"><p>cloud-itonami-isic-4671 R0: 4 jurisdictions seeded with an official spec-basis. This is a starting catalog, not a survey of all ~194 jurisdictions -- extend `fueltrade.facts/catalog`, never fabricate a jurisdiction's requirements.</p><p>Covered: GBR, JPN, NOR, USA (4 / 4).</p></div>
+  </section>
+</main>
+<footer><p>Generated at build time by <code>fueltrade.render-html</code> (<code>clojure -M:dev:render-html</code>) by running <code>fueltrade.operation</code> &rarr; <code>fueltrade.governor</code> &rarr; <code>fueltrade.store</code> against the seeded demo data. Deterministic: no timestamps and no randomness in the page, so two consecutive runs are byte-identical. Styling uses the jp-go-dds (デジタル庁デザインシステム) primitives this repo already vendors into <code>docs/index.html</code>.</p></footer>
+</body></html>
