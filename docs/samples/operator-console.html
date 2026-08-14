@@ -95,15 +95,15 @@ footer p{margin:0}
     <table>
       <thead><tr><th>Op</th><th>Order</th><th>Rule</th><th>Detail</th><th>Advisor confidence</th></tr></thead>
       <tbody>
-        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">evidence-incomplete</span></td><td>法域の必要書類(信用審査記録/契約書またはPO/制裁スクリーニング記録)が充足していない状態での提案</td><td><span class="num">0.9</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">phase gate · phase-disabled</span></td><td>rollout phase 1 (assisted-intake) does not enable this write op -- the governor itself had already cleared it</td><td><span class="num">0.9</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-delivered</span></td><td>fo-1 は既に出荷済み</td><td><span class="num">0.9</span></td></tr>
-        <tr><td><code>settle</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-invoiced</span></td><td>fo-1 は既に請求済み</td><td><span class="num">0.9</span></td></tr>
-        <tr><td><code>verify</code></td><td><code>fo-2</code></td><td><span class="pill is-bad">no-spec-basis</span></td><td>公式spec-basisの引用が無い提案は法域要件として扱えない</td><td><span class="num">0.9</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-3</code></td><td><span class="pill is-bad">credit-uncleared</span></td><td>fo-3 の取引先信用審査(credit-clearance)が未了 -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-4</code></td><td><span class="pill is-bad">contract-missing</span></td><td>fo-4 に契約条項(contract-terms)の記録が無い -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
-        <tr><td><code>settle</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">evidence-incomplete</span></td><td>法域の必要書類(信用審査記録/契約書またはPO/制裁スクリーニング記録)が充足していない状態での提案</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">phase gate · phase-disabled</span></td><td>rollout phase 1 (assisted-intake) does not enable this write op -- the governor itself had already cleared it</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-delivered</span></td><td>fo-1 は既に出荷済み</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>invoice/settle</code></td><td><code>fo-1</code></td><td><span class="pill is-bad">already-invoiced</span></td><td>fo-1 は既に請求済み</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>contract/verify</code></td><td><code>fo-2</code></td><td><span class="pill is-bad">no-spec-basis</span></td><td>公式spec-basisの引用が無い提案は法域要件として扱えない</td><td><span class="num">0.9</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-3</code></td><td><span class="pill is-bad">credit-uncleared</span></td><td>fo-3 の取引先信用審査(credit-clearance)が未了 -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-4</code></td><td><span class="pill is-bad">contract-missing</span></td><td>fo-4 に契約条項(contract-terms)の記録が無い -- 出荷提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
+        <tr><td><code>invoice/settle</code></td><td><code>fo-5</code></td><td><span class="pill is-bad">counterparty-sanctions-flag-unresolved</span></td><td>fo-5 の取引先制裁スクリーニング(OFAC等)が未了 -- 出荷・請求提案は進められない</td><td><span class="num">0.3</span></td></tr>
       </tbody>
     </table>
     </div>
@@ -116,9 +116,9 @@ footer p{margin:0}
       <thead><tr><th>Phase</th><th>Label</th><th>Writes allowed</th><th>May auto-commit when governor-clean</th></tr></thead>
       <tbody>
         <tr><td><span class="num">0</span></td><td><code>read-only</code></td><td><span class="muted">none (read-only)</span></td><td><span class="muted">none — every write needs a human</span></td></tr>
-        <tr><td><span class="num">1</span></td><td><code>assisted-intake</code></td><td><code>intake</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
-        <tr><td><span class="num">2</span></td><td><code>assisted-verify</code></td><td><code>intake</code> <code>verify</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
-        <tr><td><span class="num">3</span></td><td><code>supervised-auto</code></td><td><code>dispatch</code> <code>intake</code> <code>settle</code> <code>verify</code></td><td><code>intake</code></td></tr>
+        <tr><td><span class="num">1</span></td><td><code>assisted-intake</code></td><td><code>order/intake</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
+        <tr><td><span class="num">2</span></td><td><code>assisted-verify</code></td><td><code>contract/verify</code> <code>order/intake</code></td><td><span class="muted">none — every write needs a human</span></td></tr>
+        <tr><td><span class="num">3</span></td><td><code>supervised-auto</code></td><td><code>contract/verify</code> <code>delivery/dispatch</code> <code>invoice/settle</code> <code>order/intake</code></td><td><code>order/intake</code></td></tr>
       </tbody>
     </table>
     </div>
@@ -130,23 +130,23 @@ footer p{margin:0}
     <table>
       <thead><tr><th>Thread</th><th>Operation</th><th>Escalation</th><th>Human decision</th><th>Final disposition</th></tr></thead>
       <tbody>
-        <tr><td><code>t01</code></td><td>fo-1 intake (phase 3 auto-commit)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t02</code></td><td>fo-1 dispatch before any contract assessment</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t01</code></td><td>fo-1 intake (phase 3 auto-commit)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-ok">commit</span></td></tr>
+        <tr><td><code>t02</code></td><td>fo-1 dispatch before any contract assessment</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t03</code></td><td>fo-1 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t04</code></td><td>fo-1 dispatch attempted at rollout phase 1</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t04</code></td><td>fo-1 dispatch attempted at rollout phase 1</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t05</code></td><td>fo-1 bulk-fuel dispatch (approved)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
         <tr><td><code>t06</code></td><td>fo-1 invoice settlement (approved)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t07</code></td><td>fo-1 dispatch a second time</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
-        <tr><td><code>t08</code></td><td>fo-1 invoice settled a second time</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
-        <tr><td><code>t09</code></td><td>fo-2 contract verification (unregistered jurisdiction ATL)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t07</code></td><td>fo-1 dispatch a second time</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t08</code></td><td>fo-1 invoice settled a second time</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t09</code></td><td>fo-2 contract verification (unregistered jurisdiction ATL)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t10</code></td><td>fo-3 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t11</code></td><td>fo-3 dispatch (counterparty credit not cleared)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t11</code></td><td>fo-3 dispatch (counterparty credit not cleared)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t12</code></td><td>fo-4 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t13</code></td><td>fo-4 dispatch (no contract terms on file)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t13</code></td><td>fo-4 dispatch (no contract terms on file)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t14</code></td><td>fo-4 invoice settlement (human rejected)</td><td><span class="pill is-warn">escalated · actuation</span></td><td><span class="pill is-warn">rejected by approver</span></td><td><span class="pill is-bad">hold</span></td></tr>
         <tr><td><code>t15</code></td><td>fo-5 contract verification (approved)</td><td><span class="pill is-warn">escalated · phase-approval</span></td><td><span class="pill is-ok">approved by op-1</span></td><td><span class="pill is-ok">commit</span></td></tr>
-        <tr><td><code>t16</code></td><td>fo-5 dispatch (sanctions screening not passed)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
-        <tr><td><code>t17</code></td><td>fo-5 invoice settlement (sanctions screening not passed)</td><td><span class="muted">—</span></td><td><span class="muted">—</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t16</code></td><td>fo-5 dispatch (sanctions screening not passed)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
+        <tr><td><code>t17</code></td><td>fo-5 invoice settlement (sanctions screening not passed)</td><td><span class="muted">not escalated</span></td><td><span class="muted">no human involved</span></td><td><span class="pill is-bad">hold</span></td></tr>
       </tbody>
     </table>
     </div>
@@ -156,16 +156,16 @@ footer p{margin:0}
     <p class="lead"><code>fueltrade.operation</code> attaches the approver to the commit record's <code>:payload</code> only; <code>:value</code> is left exactly as the advisor proposed it. Whether the approver then survives is decided per-effect by <code>fueltrade.store/commit-record!</code>. This table is derived at render time by walking each register and testing for the key, so it self-corrects if the store is later changed &mdash; it is not a hardcoded verdict.</p>
     <div class="scroll">
     <table>
-      <thead><tr><th>Register</th><th>Effect</th><th>Commit path</th><th>Rows</th><th>Approver in the committed record</th></tr></thead>
+      <thead><tr><th>Register</th><th>Effect</th><th>Commit path</th><th>Rows committed</th><th>Of those, human-approved</th><th>Approver in the committed record</th></tr></thead>
       <tbody>
-        <tr><td>contract assessment</td><td><code>:contract-assessment/set</code></td><td>persists the record's :payload</td><td><span class="num">4</span></td><td><span class="pill is-ok">approver retained (4 / 4)</span></td></tr>
-        <tr><td>fuel-order record</td><td><code>:order/upsert</code></td><td>persists the record's :value</td><td><span class="num">5</span></td><td><span class="pill is-bad">approver DROPPED (0 / 5)</span></td></tr>
-        <tr><td>fuel-delivery draft</td><td><code>:order/mark-delivered</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
-        <tr><td>fuel-invoice draft</td><td><code>:order/mark-invoiced</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
+        <tr><td>contract assessment</td><td><code>contract-assessment/set</code></td><td>persists the record's :payload</td><td><span class="num">4</span></td><td><span class="num">4</span></td><td><span class="pill is-ok">approver retained (4 / 4)</span></td></tr>
+        <tr><td>fuel-order record</td><td><code>order/upsert</code></td><td>persists the record's :value</td><td><span class="num">5</span></td><td><span class="num">0</span></td><td><span class="muted">no human-approved commit this run</span></td></tr>
+        <tr><td>fuel-delivery draft</td><td><code>order/mark-delivered</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
+        <tr><td>fuel-invoice draft</td><td><code>order/mark-invoiced</code></td><td>recomputed from fueltrade.registry</td><td><span class="num">1</span></td><td><span class="num">1</span></td><td><span class="pill is-bad">approver DROPPED (0 / 1)</span></td></tr>
       </tbody>
     </table>
     </div>
-    <div class="note alarm"><p><strong>Attribution gap observed in this run.</strong> The assessment branch of <code>commit-record!</code> persists <code>payload</code>, so the approver survives there. The fuel-order branch persists <code>value</code>, and the two actuation branches (<code>:order/mark-delivered</code>, <code>:order/mark-invoiced</code>) recompute their record from <code>fueltrade.registry</code> and read neither &mdash; so for the two acts that actually move product and money, the approver is <strong>not</strong> in the book of record.</p><p>Who signed off is shown below from the audit facts instead, and is labelled <em>(audit only &mdash; not in commit record)</em> wherever that is the case. This page does not omit the approver: a reader must be able to tell &ldquo;nobody approved&rdquo; from &ldquo;the store did not keep it&rdquo;.</p></div>
+    <div class="note alarm"><p><strong>Attribution gap observed in this run.</strong> The assessment branch of <code>commit-record!</code> persists <code>payload</code>, so the approver survives there. The two actuation branches (<code>:order/mark-delivered</code>, <code>:order/mark-invoiced</code>) recompute their record from <code>fueltrade.registry</code> and read neither <code>payload</code> nor <code>value</code> &mdash; so for the two acts that actually move product and money, the approver is <strong>not</strong> in the book of record. (The fuel-order branch persists <code>value</code>, which would drop the approver too, but no fuel-order upsert was human-approved in this run, so it is reported as such rather than counted as a loss.)</p><p>Who signed off is shown below from the audit facts instead, and is labelled <em>(audit only &mdash; not in commit record)</em> wherever that is the case. This page does not omit the approver: a reader must be able to tell &ldquo;nobody approved&rdquo; from &ldquo;the store did not keep it&rdquo;.</p></div>
   </section>
   <section class="card">
     <h2>Who signed off &mdash; from the audit facts</h2>
@@ -174,12 +174,12 @@ footer p{margin:0}
     <table>
       <thead><tr><th>Op</th><th>Order</th><th>Approver</th><th>Where this is recorded</th></tr></thead>
       <tbody>
-        <tr><td><code>verify</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
-        <tr><td><code>dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
-        <tr><td><code>settle</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
-        <tr><td><code>verify</code></td><td><code>fo-3</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
-        <tr><td><code>verify</code></td><td><code>fo-4</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
-        <tr><td><code>verify</code></td><td><code>fo-5</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>contract/verify</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
+        <tr><td><code>invoice/settle</code></td><td><code>fo-1</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-warn">audit only — not in commit record</span></td></tr>
+        <tr><td><code>contract/verify</code></td><td><code>fo-3</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>contract/verify</code></td><td><code>fo-4</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
+        <tr><td><code>contract/verify</code></td><td><code>fo-5</code></td><td><span class="pill is-ok">op-1</span></td><td><span class="pill is-info">commit record + audit</span></td></tr>
       </tbody>
     </table>
     </div>
@@ -204,23 +204,23 @@ footer p{margin:0}
     <table>
       <thead><tr><th>Fact</th><th>Op</th><th>Order</th><th>Basis</th><th>Confidence</th></tr></thead>
       <tbody>
-        <tr><td>committed</td><td><code>intake</code></td><td><code>fo-1</code></td><td>id, counterparty</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>evidence-incomplete</td><td><span class="num">0.9</span></td></tr>
-        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-1</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>phase-disabled</td><td><span class="num">0.9</span></td></tr>
-        <tr><td>committed</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
-        <tr><td>committed</td><td><code>settle</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-1</code></td><td>already-delivered</td><td><span class="num">0.9</span></td></tr>
-        <tr><td>governor-hold</td><td><code>settle</code></td><td><code>fo-1</code></td><td>already-invoiced</td><td><span class="num">0.9</span></td></tr>
-        <tr><td>governor-hold</td><td><code>verify</code></td><td><code>fo-2</code></td><td>no-spec-basis</td><td><span class="num">0.9</span></td></tr>
-        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-3</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-3</code></td><td>credit-uncleared</td><td><span class="num">0.3</span></td></tr>
-        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-4</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-4</code></td><td>contract-missing</td><td><span class="num">0.3</span></td></tr>
-        <tr><td>approval-rejected</td><td><code>settle</code></td><td><code>fo-4</code></td><td>approver-rejected</td><td><span class="num">0.3</span></td></tr>
-        <tr><td>committed</td><td><code>verify</code></td><td><code>fo-5</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
-        <tr><td>governor-hold</td><td><code>dispatch</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
-        <tr><td>governor-hold</td><td><code>settle</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>committed</td><td><code>order/intake</code></td><td><code>fo-1</code></td><td>id, counterparty</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td>evidence-incomplete</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>contract/verify</code></td><td><code>fo-1</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td>phase-disabled</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
+        <tr><td>committed</td><td><code>invoice/settle</code></td><td><code>fo-1</code></td><td>fo-1</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-1</code></td><td>already-delivered</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>governor-hold</td><td><code>invoice/settle</code></td><td><code>fo-1</code></td><td>already-invoiced</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>governor-hold</td><td><code>contract/verify</code></td><td><code>fo-2</code></td><td>no-spec-basis</td><td><span class="num">0.9</span></td></tr>
+        <tr><td>committed</td><td><code>contract/verify</code></td><td><code>fo-3</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-3</code></td><td>credit-uncleared</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>committed</td><td><code>contract/verify</code></td><td><code>fo-4</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-4</code></td><td>contract-missing</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>approval-rejected</td><td><code>invoice/settle</code></td><td><code>fo-4</code></td><td>approver-rejected</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>committed</td><td><code>contract/verify</code></td><td><code>fo-5</code></td><td>関税法 (Customs Act); 輸出貿易管理令 (Foreign Exchange and Foreign Trade Control Act / Export Trade Control Order), https://www.customs.go.jp/</td><td><span class="muted">—</span></td></tr>
+        <tr><td>governor-hold</td><td><code>delivery/dispatch</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
+        <tr><td>governor-hold</td><td><code>invoice/settle</code></td><td><code>fo-5</code></td><td>counterparty-sanctions-flag-unresolved</td><td><span class="num">0.3</span></td></tr>
       </tbody>
     </table>
     </div>

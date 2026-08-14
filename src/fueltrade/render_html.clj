@@ -243,29 +243,47 @@
   `fueltrade.store/commit-record!`: the assessment branch persists
   `payload`, the fuel-order branch persists `value`, and the two
   actuation branches recompute their record from `fueltrade.registry`
-  and read neither."
-  [db]
+  and read neither.
+
+  The denominator is deliberately NOT the row count. A register whose
+  rows were all auto-committed had no approver to keep, and reporting
+  that as `0 / n` would conflate `nobody approved` with `the store did
+  not keep it` -- the exact confusion this section exists to prevent.
+  So the expected count is joined from the `:approval-granted` audit
+  facts: how many commits into this register a human actually signed."
+  [db grants]
   (let [orders (store/all-fuel-orders db)
         assessments (keep #(store/assessment-of db (:id %)) orders)
-        deliveries (store/delivery-history db)
-        invoices (store/invoice-history db)
-        present (fn [rows pred] [(count rows) (count (filter pred rows))])]
+        signed (fn [op] (count (filter #(= op (:op %)) grants)))
+        held (fn [rows k] (count (filter #(contains? % k) rows)))]
     [{:register "contract assessment"
-      :effect ":contract-assessment/set"
+      :effect :contract-assessment/set
+      :op :contract/verify
       :commit-path "persists the record's :payload"
-      :counts (present assessments #(contains? % :approved-by))}
+      :rows (count assessments)
+      :approved (signed :contract/verify)
+      :retained (held assessments :approved-by)}
      {:register "fuel-order record"
-      :effect ":order/upsert"
+      :effect :order/upsert
+      :op :order/intake
       :commit-path "persists the record's :value"
-      :counts (present orders #(contains? % :approved-by))}
+      :rows (count orders)
+      :approved (signed :order/intake)
+      :retained (held orders :approved-by)}
      {:register "fuel-delivery draft"
-      :effect ":order/mark-delivered"
+      :effect :order/mark-delivered
+      :op :delivery/dispatch
       :commit-path "recomputed from fueltrade.registry"
-      :counts (present deliveries #(contains? % "approved_by"))}
+      :rows (count (store/delivery-history db))
+      :approved (signed :delivery/dispatch)
+      :retained (held (store/delivery-history db) "approved_by")}
      {:register "fuel-invoice draft"
-      :effect ":order/mark-invoiced"
+      :effect :order/mark-invoiced
+      :op :invoice/settle
       :commit-path "recomputed from fueltrade.registry"
-      :counts (present invoices #(contains? % "approved_by"))}]))
+      :rows (count (store/invoice-history db))
+      :approved (signed :invoice/settle)
+      :retained (held (store/invoice-history db) "approved_by")}]))
 
 (defn- evidence-state
   "Has this order's committed assessment actually satisfied its
@@ -294,7 +312,13 @@
 (defn- info [label] (pill "is-info" label))
 (defn- muted [label] (str "<span class=\"muted\">" (esc label) "</span>"))
 (defn- code [v] (str "<code>" (esc v) "</code>"))
-(defn- kw-name [v] (if (keyword? v) (name v) (str v)))
+(defn- kw-name
+  "Keyword -> its FULLY QUALIFIED name. `clojure.core/name` would drop
+  the namespace and render `:delivery/dispatch` and any other
+  `dispatch`-suffixed op identically, which makes the op column
+  ambiguous."
+  [v]
+  (if (keyword? v) (subs (str v) 1) (str v)))
 
 (defn- row [cells]
   (str "        <tr>" (str/join (map #(str "<td>" % "</td>") cells)) "</tr>"))
@@ -488,22 +512,25 @@
             (str/join " " (map #(code (kw-name %)) (sort-by kw-name auto)))
             (muted "none — every write needs a human"))])))
 
-(defn- approval-row [grants rejections {:keys [id label disposition audit]}]
-  (let [req (first (filter #(= :approval-requested (:t %)) audit))
-        grant (first (filter #(= :approval-granted (:t %)) (filter (set grants) audit)))
-        reject (first (filter #(= :approval-rejected (:t %))
-                              (map #(assoc % :t (:t %)) rejections)))]
+(defn- approval-row
+  "One row per operation run, read out of THAT thread's own audit
+  channel -- never out of a fleet-wide bag of facts, so a thread cannot
+  inherit another thread's approval."
+  [{:keys [id label disposition audit]}]
+  (let [of (fn [t] (first (filter #(= t (:t %)) audit)))
+        req (of :approval-requested)
+        grant (of :approval-granted)
+        reject (of :approval-rejected)]
     (row [(code id)
           (esc label)
-          (cond
-            req (warn (str "escalated · " (kw-name (:reason req))))
-            :else (muted "—"))
+          (if req
+            (warn (str "escalated · " (kw-name (:reason req))))
+            (muted "not escalated"))
           (cond
             grant (ok (str "approved by " (:by grant)))
-            (and req (= :hold disposition) reject) (warn "rejected by approver")
-            (and req (= :hold disposition)) (warn "rejected by approver")
+            reject (warn "rejected by approver")
             req (muted "pending")
-            :else (muted "—"))
+            :else (muted "no human involved"))
           (case disposition
             :commit (ok "commit")
             :hold (bad "hold")
@@ -511,17 +538,18 @@
             (muted "—"))])))
 
 (defn- attribution-rows [probe]
-  (for [{:keys [register effect commit-path counts]} probe
-        :let [[total with] counts]]
+  (for [{:keys [register effect commit-path rows approved retained]} probe]
     (row [(esc register)
-          (code effect)
+          (code (kw-name effect))
           (esc commit-path)
-          (str "<span class=\"num\">" total "</span>")
+          (str "<span class=\"num\">" rows "</span>")
+          (str "<span class=\"num\">" approved "</span>")
           (cond
-            (zero? total) (muted "no rows committed")
-            (= total with) (ok (str "approver retained (" with " / " total ")"))
-            (zero? with) (bad (str "approver DROPPED (0 / " total ")"))
-            :else (warn (str "partial (" with " / " total ")")))])))
+            (zero? rows) (muted "no rows committed")
+            (zero? approved) (muted "no human-approved commit this run")
+            (>= retained approved) (ok (str "approver retained (" retained " / " approved ")"))
+            (zero? retained) (bad (str "approver DROPPED (0 / " approved ")"))
+            :else (warn (str "partial (" retained " / " approved ")")))])))
 
 (defn- ledger-row [{:keys [t op subject basis phase-reason confidence]}]
   (row [(esc (kw-name t))
@@ -568,15 +596,16 @@
         rejections (approval-rejections ledger)
         grants (approval-grants threads)
         fired (hard-rules-fired ledger)
-        probe (attribution-probe db)
+        probe (attribution-probe db grants)
         deliveries (store/delivery-history db)
         invoices (store/invoice-history db)
         cov (facts/coverage)
         hard-holds (filter #(seq (:violations %)) holds)
         phase-holds (remove #(seq (:violations %)) holds)
-        attribution-gap? (some (fn [{[total with] :counts}]
-                                 (and (pos? total) (< with total)))
-                               probe)]
+        attribution-gap? (boolean
+                          (some (fn [{:keys [approved retained]}]
+                                  (and (pos? approved) (< retained approved)))
+                                probe))]
     (str
      "<!doctype html>\n"
      "<html lang=\"en\"><head><meta charset=\"utf-8\">"
@@ -656,7 +685,7 @@
            (count grants) " approvals were granted and " (count rejections)
            " was rejected in this scenario.")
       (table ["Thread" "Operation" "Escalation" "Human decision" "Final disposition"]
-             (map (partial approval-row grants rejections) threads)))
+             (map approval-row threads)))
 
      (section
       "Approver attribution &mdash; measured, not assumed"
@@ -667,17 +696,21 @@
            "time by walking each register and testing for the key, so it self-corrects if "
            "the store is later changed &mdash; it is not a hardcoded verdict.")
       (str
-       (table ["Register" "Effect" "Commit path" "Rows" "Approver in the committed record"]
+       (table ["Register" "Effect" "Commit path" "Rows committed"
+               "Of those, human-approved" "Approver in the committed record"]
               (attribution-rows probe))
        (if attribution-gap?
          (str "    <div class=\"note alarm\"><p><strong>Attribution gap observed in this "
               "run.</strong> The assessment branch of <code>commit-record!</code> persists "
-              "<code>payload</code>, so the approver survives there. The fuel-order branch "
-              "persists <code>value</code>, and the two actuation branches "
-              "(<code>:order/mark-delivered</code>, <code>:order/mark-invoiced</code>) "
-              "recompute their record from <code>fueltrade.registry</code> and read neither "
-              "&mdash; so for the two acts that actually move product and money, the "
-              "approver is <strong>not</strong> in the book of record.</p>"
+              "<code>payload</code>, so the approver survives there. The two actuation "
+              "branches (<code>:order/mark-delivered</code>, "
+              "<code>:order/mark-invoiced</code>) recompute their record from "
+              "<code>fueltrade.registry</code> and read neither <code>payload</code> nor "
+              "<code>value</code> &mdash; so for the two acts that actually move product "
+              "and money, the approver is <strong>not</strong> in the book of record. "
+              "(The fuel-order branch persists <code>value</code>, which would drop the "
+              "approver too, but no fuel-order upsert was human-approved in this run, so "
+              "it is reported as such rather than counted as a loss.)</p>"
               "<p>Who signed off is shown below from the audit facts instead, and is "
               "labelled <em>(audit only &mdash; not in commit record)</em> wherever that is "
               "the case. This page does not omit the approver: a reader must be able to tell "
