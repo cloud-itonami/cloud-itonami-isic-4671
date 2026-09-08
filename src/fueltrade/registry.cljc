@@ -26,7 +26,7 @@
   fuel at the wholesale rack or settling a real fuel invoice itself
   (that is `fueltrade.operation`'s `:delivery/dispatch`/
   `:invoice/settle`, always human-gated -- see README `Actuation`)."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (defn- unsigned-certificate
   "Every certificate this actor produces is UNSIGNED -- signature is
@@ -62,7 +62,7 @@
     (throw (ex-info "fuel-delivery: jurisdiction required" {})))
   (when (< sequence 0)
     (throw (ex-info "fuel-delivery: sequence must be >= 0" {})))
-  (let [delivery-number (str (str/upper-case jurisdiction) "-DELIVERY-" (zero-pad sequence 6))
+  (let [delivery-number (str (str/upper jurisdiction) "-DELIVERY-" (zero-pad sequence 6))
         record {"record_id" delivery-number
                 "kind" "fuel-delivery-draft"
                 "fuel_order_id" fuel-order-id
@@ -87,7 +87,7 @@
     (throw (ex-info "fuel-invoice: jurisdiction required" {})))
   (when (< sequence 0)
     (throw (ex-info "fuel-invoice: sequence must be >= 0" {})))
-  (let [invoice-number (str (str/upper-case jurisdiction) "-INVOICE-" (zero-pad sequence 6))
+  (let [invoice-number (str (str/upper jurisdiction) "-INVOICE-" (zero-pad sequence 6))
         record {"record_id" invoice-number
                 "kind" "fuel-invoice-draft"
                 "fuel_order_id" fuel-order-id
