@@ -131,7 +131,7 @@ prior governor's guards establish, informed by `cloud-itonami-isic-
 `fueltrade.store/Store` is implemented by both `MemStore` (atom-backed,
 default for dev/tests/demo) and `DatomicStore` (`langchain.db`-backed),
 proven to satisfy the same contract in
-`test/fueltrade/store_contract_test.clj`. The ledger stays append-only
+`test/fueltrade/store_contract_test.cljk`. The ledger stays append-only
 on every backend: which fuel-order was verified for a jurisdiction with
 no official spec-basis, which counterparty had credit-uncleared / no
 contract / an unresolved sanctions-screening flag, which order had bulk
@@ -190,7 +190,7 @@ fuel or auto-settle an invoice.
   differentiator from the crude-extraction sibling's registry-hosted
   physical range checks.
 - `MemStore` || `DatomicStore` parity is proven by
-  `test/fueltrade/store_contract_test.clj`.
+  `test/fueltrade/store_contract_test.cljk`.
 - 34 tests / 164 assertions pass; lint is clean; the demo
   (`clojure -M:dev:run`) walks one clean delivery + invoice lifecycle,
   plus six HARD-hold scenarios (no spec-basis, credit-uncleared,

@@ -76,7 +76,7 @@ construction.** Two independent layers enforce this
 (`fueltrade.governor`'s `:delivery/dispatch`/`:invoice/settle`
 high-stakes gate and `fueltrade.phase`'s phase table, which never puts
 either op in any phase's `:auto` set) -- see `fueltrade.phase`'s
-docstring and `test/fueltrade/phase_test.clj`'s
+docstring and `test/fueltrade/phase_test.cljk`'s
 `delivery-dispatch-never-auto-at-any-phase`/
 `invoice-settle-never-auto-at-any-phase`. The actor may draft, check
 and recommend; a human trading supervisor is always the one who
@@ -175,14 +175,14 @@ robotics/identity/forms/dmn/bpmn/audit-ledger stack.
 
 | File | Role |
 |---|---|
-| `src/fueltrade/store.cljc` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + delivery AND invoice history (dual history). The double-actuation guard checks dedicated `:delivered?`/`:invoiced?` booleans rather than a `:status` value |
-| `src/fueltrade/registry.cljc` | Delivery/invoice draft records (record construction only -- the Fuel Trading Governor's checks are direct entity booleans, so there are no pure range-check functions to host here, unlike the crude sibling's registry) |
-| `src/fueltrade/facts.cljc` | Per-jurisdiction fuel-wholesale / sanctions / fuel-excise catalog with an official spec-basis citation per entry, honest coverage reporting |
-| `src/fueltrade/fueltradeadvisor.cljc` | **FuelTradeAdvisor** -- `mock-advisor` ‖ `llm-advisor`; intake/contract-verification/delivery/invoice proposals |
-| `src/fueltrade/governor.cljc` | **Fuel Trading Governor** -- 5 HARD checks (spec-basis · evidence-incomplete · credit-uncleared · contract-missing · counterparty-sanctions-flag-unresolved) + 2 double-actuation guards + 1 soft (confidence/actuation gate) |
-| `src/fueltrade/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (delivery/invoice always human; order intake is the ONLY auto-eligible op, no direct capital risk) |
-| `src/fueltrade/operation.cljc` | **OperationActor** -- langgraph StateGraph |
-| `src/fueltrade/sim.cljc` | demo driver |
+| `src/fueltrade/store.cljk` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + delivery AND invoice history (dual history). The double-actuation guard checks dedicated `:delivered?`/`:invoiced?` booleans rather than a `:status` value |
+| `src/fueltrade/registry.cljk` | Delivery/invoice draft records (record construction only -- the Fuel Trading Governor's checks are direct entity booleans, so there are no pure range-check functions to host here, unlike the crude sibling's registry) |
+| `src/fueltrade/facts.cljk` | Per-jurisdiction fuel-wholesale / sanctions / fuel-excise catalog with an official spec-basis citation per entry, honest coverage reporting |
+| `src/fueltrade/fueltradeadvisor.cljk` | **FuelTradeAdvisor** -- `mock-advisor` ‖ `llm-advisor`; intake/contract-verification/delivery/invoice proposals |
+| `src/fueltrade/governor.cljk` | **Fuel Trading Governor** -- 5 HARD checks (spec-basis · evidence-incomplete · credit-uncleared · contract-missing · counterparty-sanctions-flag-unresolved) + 2 double-actuation guards + 1 soft (confidence/actuation gate) |
+| `src/fueltrade/phase.cljk` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (delivery/invoice always human; order intake is the ONLY auto-eligible op, no direct capital risk) |
+| `src/fueltrade/operation.cljk` | **OperationActor** -- langgraph StateGraph |
+| `src/fueltrade/sim.cljk` | demo driver |
 | `test/fueltrade/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)

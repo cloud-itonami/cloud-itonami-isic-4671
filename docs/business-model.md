@@ -65,7 +65,7 @@ of Solid, Liquid and Gaseous Fuels, ISIC 4671) and to the three
 protection`, `:transparency`).
 
 This is the rule the companion contract test
-(`test/fueltrade/governor_contract_test.clj`) encodes end-to-end: the
+(`test/fueltrade/governor_contract_test.cljk`) encodes end-to-end: the
 FuelTradeAdvisor never dispatches bulk fuel to a counterparty or settles
 an invoice the Fuel Trading Governor would reject, `:delivery/dispatch`
 and `:invoice/settle` NEVER auto-commit at any phase, `:order/intake`
