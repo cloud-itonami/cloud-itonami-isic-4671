@@ -1,5 +1,5 @@
 (ns fueltrade.sim
-  "Demo driver -- `clojure -M:dev:run`. Walks a clean fuel-order
+  "Demo driver -- `kbb -M:dev:run`. Walks a clean fuel-order
   through intake -> contract verification -> bulk-fuel delivery
   (escalate/approve/commit) -> invoice settlement (escalate/approve/
   commit), then shows HARD-hold scenarios: a jurisdiction with no

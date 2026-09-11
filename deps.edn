@@ -27,9 +27,9 @@
   :dev {:override-deps
         {io.github.kotoba-lang/langchain
          {:local/root "../../kotoba-lang/langchain"}}}
-  ;; clojure -M:dev:run  -> drive the demo through one OperationActor
+  ;; kbb -M:dev:run  -> drive the demo through one OperationActor
   :run {:main-opts ["-m" "fueltrade.sim"]}
-  ;; clojure -M:dev:render-html -> build-time render of
+  ;; kbb -M:dev:render-html -> build-time render of
   ;; docs/samples/operator-console.html by driving the REAL actor stack
   ;; (fueltrade.operation -> fueltrade.governor -> fueltrade.store).
   ;; Deterministic; throws rather than emit a console with no governor holds.

@@ -13,7 +13,7 @@
   Nothing on the page is hand-typed domain data.
 
   The scenario is adapted from this repo's own `fueltrade.sim` demo
-  driver (`clojure -M:dev:run`, run and read BEFORE this file was
+  driver (`kbb -M:dev:run`, run and read BEFORE this file was
   written), extended so that ALL SEVEN of the Fuel Trading Governor's
   HARD rules fire at least once, each isolated on the fuel-order whose
   seed data isolates exactly that failure mode, plus the two non-rule
@@ -30,7 +30,7 @@
   rule inventory) actually fired. A console that silently lost its
   holds is a worse artifact than no console.
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [kotoba.lang.text :as str]
             [fueltrade.facts :as facts]
@@ -773,7 +773,7 @@
 
      "</main>\n"
      "<footer><p>Generated at build time by <code>fueltrade.render-html</code> "
-     "(<code>clojure -M:dev:render-html</code>) by running "
+     "(<code>kbb -M:dev:render-html</code>) by running "
      "<code>fueltrade.operation</code> &rarr; <code>fueltrade.governor</code> &rarr; "
      "<code>fueltrade.store</code> against the seeded demo data. Deterministic: no "
      "timestamps and no randomness in the page, so two consecutive runs are "
