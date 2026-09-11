@@ -192,7 +192,7 @@ fuel or auto-settle an invoice.
 - `MemStore` || `DatomicStore` parity is proven by
   `test/fueltrade/store_contract_test.cljk`.
 - 34 tests / 164 assertions pass; lint is clean; the demo
-  (`clojure -M:dev:run`) walks one clean delivery + invoice lifecycle,
+  (`kbb -M:dev:run`) walks one clean delivery + invoice lifecycle,
   plus six HARD-hold scenarios (no spec-basis, credit-uncleared,
   contract-missing, sanctions, double delivery, double invoice),
   end-to-end.

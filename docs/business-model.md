@@ -245,7 +245,7 @@ requirements to make coverage look bigger.
 ## Maturity
 
 `:implemented` -- `FuelTradeAdvisor` + `Fuel Trading Governor` run as
-real, tested code (`clojure -M:dev:test`: 34 tests / 164 assertions, 0
+real, tested code (`kbb -M:dev:test`: 34 tests / 164 assertions, 0
 failures; lint clean), promoted from the originally-published
 `:blueprint`-tier scaffold, following the SAME governed-actor
 architecture as the other prior actors across this fleet, with its own
