@@ -1,0 +1,32 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": an autonomous loading-rack / valve robot
+;; performs the bulk-fuel loading at the wholesale rack and eventually the
+;; shut-off (ISIC 4671). The physical work: the flow through the loading arm
+;; into the road tanker (static-electricity velocity), and the rack pump
+;; that lifts gasoline from the tank farm to the rack.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-4671"
+ :cases
+ [{:id :bottom-load-tanker
+   :kind :pipe-flow
+   :procedure "rack robot opens the valve and bottom-loads gasoline into a road tanker compartment through a DN100 loading arm"
+   :params {:diameter-m 0.10 :length-m 30.0 :roughness-m 4.5e-5 :density-kg-m3 740.0
+            :viscosity-pa-s 5.0e-4 :pump-efficiency 0.70 :elevation-m 2.0}
+   :sweep {:param :q-m3s :values [0.010 0.020 0.030 0.045 0.060]}
+   :quantity :velocity-mps
+   :limit {:max 7.0 :basis "estimate: the ~7 m/s line-velocity ceiling commonly applied to low-conductivity fuel loading for static-electricity control (IEC TS 60079-32-1 style guidance, to be verified against the document); the slower initial-fill velocity is not modelled"}
+   :boundary {:lo 0.001 :hi 0.1}}
+  {:id :rack-pump-line
+   :kind :pipe-flow
+   :procedure "rack pump lifts gasoline at 2300 L/min through 120 m of line from the tank farm to the rack, 5 m up; the line diameter is swept"
+   :params {:q-m3s 0.038 :length-m 120.0 :roughness-m 4.5e-5 :density-kg-m3 740.0
+            :viscosity-pa-s 5.0e-4 :pump-efficiency 0.70 :elevation-m 5.0}
+   :sweep {:param :diameter-m :values [0.075 0.090 0.100 0.125 0.150]}
+   :quantity :pump-power-w
+   :limit {:max 15000.0 :basis "estimate: rating of the installed 15 kW rack-pump motor"}
+   :boundary {:lo 0.06 :hi 0.2}}]}
