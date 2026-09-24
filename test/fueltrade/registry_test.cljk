@@ -1,5 +1,5 @@
 (ns fueltrade.registry-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [fueltrade.registry :as r]))
 
 ;; The fuel-trading domain checks (credit-clearance, contract-on-file,
